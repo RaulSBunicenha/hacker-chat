@@ -30,7 +30,7 @@ export default class TerminalController {
         return msg => {
             const { userName, message } = msg
             const color = this.#getUserColor(userName)
-            chat.addItem(`{${color}}{bold}${userName}{/bold}: ${message}`)
+            chat.addItem(`{${color}}{bold}${userName}{/}: ${message}`)
             screen.render()
         }
     }
@@ -45,6 +45,8 @@ export default class TerminalController {
             .setLayoutComponent()
             .setInputComponent(this.#onInputReceived(eventEmitter))
             .setChatComponent()
+            .setStatusComponent()
+            .setActivityLogComponent()
             .build()
 
         this.#registerEvents(eventEmitter, components)
