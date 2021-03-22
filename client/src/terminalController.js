@@ -1,4 +1,5 @@
 import ComponentsBuilder from './components.js'
+import { constants } from './constants.js'
 
 
 export default class TerminalController {
@@ -31,12 +32,40 @@ export default class TerminalController {
             const { userName, message } = msg
             const color = this.#getUserColor(userName)
             chat.addItem(`{${color}}{bold}${userName}{/}: ${message}`)
+
+            screen.render()
+        }
+    }
+
+    #onLogUpdated ({ screen, activityLog }) {
+        return msg => {
+            const [userName] = msg.split(/\s/)
+            const color = this.#getUserColor(userName)
+            activityLog.addItem(`{${color}}{bold}${msg.toString()}{/}`)
+
+            screen.render()
+        }
+    }
+
+    #onStatusUpdated ({ screen, status }) {
+        return users => {
+            const { content } = status.items.shift()
+            status.clearItems()
+            status.addItem(content)
+            
+            users.forEach(userName => {
+                const color = this.#getUserColor(userName)
+                status.addItem(`{${color}}{bold}${userName}{/}`)
+            })
+            
             screen.render()
         }
     }
 
     #registerEvents (eventEmitter, components) {
-        eventEmitter.on('message:received', this.#onMessageReceived(components))
+        eventEmitter.on(constants.events.app.MESSAGE_RECEIVED, this.#onMessageReceived(components))
+        eventEmitter.on(constants.events.app.ACTIVITYLOG_UPDATED, this.#onLogUpdated(components))
+        eventEmitter.on(constants.events.app.STATUS_UPDATED, this.#onStatusUpdated(components))
     }
 
     async initializeTable (eventEmitter) {
@@ -50,6 +79,7 @@ export default class TerminalController {
             .build()
 
         this.#registerEvents(eventEmitter, components)
+
         components.input.focus()
         components.screen.render()
     }
