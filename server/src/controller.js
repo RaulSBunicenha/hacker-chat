@@ -18,13 +18,13 @@ export default class Controller {
 
     #onSocketClosed (id) {
         return data => {
-            console.log('onSocketClosed', data.toString)
+            console.log('onSocketClosed', data.toString())
         }
     }
 
     #onSocketData (id) {
         return data => {
-            console.log('onSocketData', data.toString)
+            console.log('onSocketData', data.toString())
         }
     }
 
