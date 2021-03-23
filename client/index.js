@@ -4,8 +4,6 @@ import TerminalController from './src/terminalController.js'
 
 const [ nodePath, filePah, ...commands ] = process.argv
 const config = CliConfig.parseArguments(commands)
-console.log(config)
-process.exit()
 
 const componentEmitter = new Events()
 
