@@ -51,7 +51,11 @@ export default class Controller {
                 const { event, message } = JSON.parse(data)
                 this[event](id, message)
             } catch (e) {
-                console.error(`Wrong event format:`, data.toString())
+                console.error(
+                    `Wrong event format:`, 
+                    e,
+                    data.toString()
+                )
             }
         }
     }
