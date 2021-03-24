@@ -25,6 +25,14 @@ export default class EventManager {
         const user = message
         this.#allUsers.set(user.id, user.userName)
         this.#updateUsersComponent()
+        this.#updateActivityLogComponent(`${user.userName} joined!`)
+    }
+
+    #updateActivityLogComponent (message) {
+        this.componentEmitter.emit(
+            constants.events.app.ACTIVITYLOG_UPDATED,
+            message
+        )
     }
 
     #updateUsersComponent () {
